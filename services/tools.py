@@ -119,4 +119,4 @@ def move_downloaded_file(file_name):
         shutil.move(source_path, destination_path)
         print(f'Файл {file_name} успешно перемещён.')
     except Exception as e:
-        print(f'Ошибка при перемещении файла: {e}')
+        print(f'Ошибка в move downloaded при перемещении файла: {e}')

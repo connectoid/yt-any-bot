@@ -103,7 +103,7 @@ async def process_download_video(callback: CallbackQuery, state: FSMContext):
     except Exception as e:
                 print(f'Exception in proccess download video: {e}')
                 await callback.message.answer(
-                    text='Произошла ошибка при загрузке или отправке видео. Попробуйте повторить.',
+                    text='Произошла ошибка при загрузке или отправке видео. Отправка файлов больше 50 Мб пока в разработке',
                     reply_markup=ReplyKeyboardRemove()
                 )
                 await state.clear()

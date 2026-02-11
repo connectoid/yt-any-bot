@@ -107,8 +107,8 @@ def download_video(url, resolution, is_short, id):
     return actual_output_path
 
 
-def move_downloaded_file(source_path):
-    # source_path = os.path.join(output_dir, file_name)
+def move_downloaded_file(file_name):
+    source_path = os.path.join(file_name)
     destination_dir = os.path.join(os.path.dirname(output_dir), tmp_dir)
     os.makedirs(destination_dir, exist_ok=True)
     

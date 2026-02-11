@@ -2,7 +2,7 @@ from time import sleep
 
 from aiogram import Bot, F, Router
 from aiogram.types import InputFile
-from aiogram.filters import Command, CommandStart, Text, StateFilter
+from aiogram.filters import Command, CommandStart, StateFilter
 from aiogram.types import CallbackQuery, Message
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.filters.state import State, StatesGroup
@@ -38,7 +38,7 @@ async def process_start_command(message: Message, bot: Bot):
         reply_markup=get_main_menu())
 
 
-@router.message(Text(text='Button 1'))
+@router.message(F.text(text='Button 1'))
 async def process_button_1_command(message: Message):
     await message.answer(
          text='Button 1 pressed', 
@@ -46,7 +46,7 @@ async def process_button_1_command(message: Message):
     )
 
 
-@router.message(Text, StateFilter(default_state))
+@router.message(F.text, StateFilter(default_state))
 async def process_get_url_command(callback: CallbackQuery, state: FSMContext):
     print('URL recieved')
     url = callback.text
@@ -78,7 +78,7 @@ async def process_get_url_command(callback: CallbackQuery, state: FSMContext):
     await state.set_state(FSMVideo.download_video)
 
 
-@router.callback_query(Text(endswith='p'), StateFilter(FSMVideo.download_video))
+@router.callback_query(F.text(endswith='p'), StateFilter(FSMVideo.download_video))
 async def process_download_video(callback: CallbackQuery, state: FSMContext):
     print('Handled')
     resolution = callback.data[:-1]

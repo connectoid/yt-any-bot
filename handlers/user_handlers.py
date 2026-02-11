@@ -35,14 +35,14 @@ async def content_type_example(msg: Message):
 async def process_start_command(message: Message, bot: Bot):
         await message.answer(
         text='Hello message',
-        reply_markup=get_main_menu())
+        reply_markup=ReplyKeyboardRemove())
 
 
 @router.message(F.text(text='Button 1'))
 async def process_button_1_command(message: Message):
     await message.answer(
          text='Button 1 pressed', 
-         reply_markup=get_main_menu()
+         reply_markup=ReplyKeyboardRemove()
     )
 
 
@@ -95,7 +95,7 @@ async def process_download_video(callback: CallbackQuery, state: FSMContext):
             await callback.message.answer_video(
                 video=input_file,
                 caption=f'Видео скачано в разрешении {resolution}p',
-                reply_markup=get_main_menu()
+                reply_markup=ReplyKeyboardRemove()
             )
             move_downloaded_file(output_file_path)
             await state.clear()
@@ -103,6 +103,6 @@ async def process_download_video(callback: CallbackQuery, state: FSMContext):
                 print(f'Exception in proccess download video: {e}')
                 await callback.message.answer(
                     text='Произошла ошибка при загрузке или отправке видео. Попробуйте повторить.',
-                    reply_markup=get_main_menu()
+                    reply_markup=ReplyKeyboardRemove()
                 )
                 await state.clear()

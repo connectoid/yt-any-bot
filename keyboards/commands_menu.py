@@ -5,7 +5,7 @@ from aiogram.types import BotCommand
 # Функция для настройки кнопки Menu бота
 
 commands = {
-      '/start': 'Запустить.перезапустить бота',
+      '/start': 'Запустить/перезапустить бота',
       # '/second_command': 'Second Command',
       # '/third_command': 'Third Command',
 }

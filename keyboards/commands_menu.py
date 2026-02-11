@@ -5,9 +5,9 @@ from aiogram.types import BotCommand
 # Функция для настройки кнопки Menu бота
 
 commands = {
-      '/first_command': 'First Command',
-      '/second_command': 'Second Command',
-      '/third_command': 'Third Command',
+      '/start': 'Запустить.перезапустить бота',
+      # '/second_command': 'Second Command',
+      # '/third_command': 'Third Command',
 }
 
 async def set_commands_menu(bot: Bot, commands=commands):

@@ -9,6 +9,7 @@ from aiogram.filters.state import State, StatesGroup
 from aiogram.fsm.state import default_state
 from aiogram.fsm.context import FSMContext
 from aiogram.types import FSInputFile
+from aiogram.types import ReplyKeyboardRemove
 
 
 

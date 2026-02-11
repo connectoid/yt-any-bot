@@ -78,15 +78,16 @@ async def process_get_url_command(callback: CallbackQuery, state: FSMContext):
     await state.set_state(FSMVideo.download_video)
 
 
-@router.callback_query(F.text(endswith='p'), StateFilter(FSMVideo.download_video))
+@router.callback_query(F.data, StateFilter(FSMVideo.download_video))
 async def process_download_video(callback: CallbackQuery, state: FSMContext):
     print('Handled')
     resolution = callback.data[:-1]
     video_dict = await state.get_data()
     url = video_dict['url']
     is_short = video_dict['is_short']
+    id = callback.from_user.id
     try:
-        output_file_path = download_video(url, resolution, is_short)
+        output_file_path = download_video(url, resolution, is_short, id)
         print(output_file_path)
         # Чтение файла и создание объекта InputFile одним действием
         with open(output_file_path, 'rb'):
@@ -99,9 +100,9 @@ async def process_download_video(callback: CallbackQuery, state: FSMContext):
             move_downloaded_file(output_file_path)
             await state.clear()
     except Exception as e:
+                print(f'Exception in proccess download video: {e}')
                 await callback.message.answer(
                     text='Произошла ошибка при загрузке или отправке видео. Попробуйте повторить.',
                     reply_markup=get_main_menu()
                 )
-                move_downloaded_file(output_file_path)
                 await state.clear()

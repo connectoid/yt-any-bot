@@ -90,10 +90,10 @@ def format_selector(ctx, resolution=None, is_short=None):
     }
 
 
-def download_video(url, resolution, is_short):
+def download_video(url, resolution, is_short, id):
     os.makedirs(output_dir, exist_ok=True)
     format_selector_choosen = partial(format_selector, resolution=resolution, is_short=is_short)
-    output_file_path = os.path.join(output_dir, f'%(title)s_{resolution}.%(ext)s')
+    output_file_path = os.path.join(output_dir, f'{id}_%(title)s_{resolution}.%(ext)s')
     ydl_opts = {
         'outtmpl': output_file_path,
         'format': format_selector_choosen,

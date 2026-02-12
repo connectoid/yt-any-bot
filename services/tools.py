@@ -17,7 +17,7 @@ tmp_dir = 'downloaded'
 
 
 def check_yt_url(url):
-    return 'youtube' not in url or 'youtu.be' not in url
+    return 'youtube' not in url and 'youtu.be' not in url
 
 
 def get_video_info(url):
@@ -30,7 +30,7 @@ def get_video_info(url):
             info = ydl.extract_info(url, download=False)
         except Exception as e:
             print(f'Ошибка получения информации о видео: {e}')
-            return None
+            return False
         formats = info.get('formats')
         resolutions = [format['resolution'] for format in formats]
         resolutions = resolutions[::-1]

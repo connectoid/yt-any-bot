@@ -17,7 +17,7 @@ tmp_dir = 'downloaded'
 
 
 def check_yt_url(url):
-    return 'youtube' not in url and 'youtu.be' not in url
+    return not 'youtube' not in url and 'youtu.be' not in url
 
 
 def get_video_info(url):

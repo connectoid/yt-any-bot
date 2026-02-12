@@ -16,13 +16,37 @@ output_dir = 'downloads'
 tmp_dir = 'downloaded'
 
 
+def is_valid_youtube_url(url):
+    # Регулярное выражение для полной формы адреса
+    full_pattern = r'^https?://(?:(?:www\.)?youtube\.com/(?:watch|embed)(?:\?(?!.*list=).*&)?v=([a-zA-Z0-9_-]{11}))'
+    
+    # Регулярное выражение для короткой формы адреса
+    short_pattern = r'^https?://youtu\.be/([a-zA-Z0-9_-]{11})'
+    
+    # Регулярное выражение для YouTube Shorts
+    shorts_pattern = r'^https?://(?:(?:www\.)?youtube\.com/shorts/([a-zA-Z0-9_-]{11}))'
+    
+    if re.match(full_pattern, url):
+        return True
+    elif re.match(short_pattern, url):
+        return True
+    elif re.match(shorts_pattern, url):
+        return True
+    else:
+        return False
+
+
 def get_video_info(url):
     ydl_opts = {
         'quiet': True,
         'no_warnings': True,
     }
     with YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(url, download=False)
+        try:
+            info = ydl.extract_info(url, download=False)
+        except Exception as e:
+            print(f'Ошибка при получении информации о видео: {e}')
+            return False
         formats = info.get('formats')
         resolutions = [format['resolution'] for format in formats]
         resolutions = resolutions[::-1]

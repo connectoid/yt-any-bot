@@ -27,9 +27,6 @@ def get_video_info(url):
     }
     with YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=False)
-        if not info:
-            print(f'Ошибка получения информации о видео: {e}')
-            return False
         formats = info.get('formats')
         resolutions = [format['resolution'] for format in formats]
         resolutions = resolutions[::-1]

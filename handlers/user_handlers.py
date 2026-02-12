@@ -43,45 +43,31 @@ async def process_start_command(message: Message, bot: Bot):
 async def process_get_url_command(callback: CallbackQuery, state: FSMContext):
     print('URL recieved')
     url = callback.text
-    if check_yt_url(url):
-         print('Wrong url level 1')
-         await callback.message.answer(
-                text='Ссылка неправильная, отправьие корректную ссылку на видео в формате https://youtube.com/.. или https://youtu.be/..',
-                reply_markup=ReplyKeyboardRemove()
-            )
-    video_info = get_video_info(url)
-    if not video_info:
-         print('Wrong url level 2')
-         await callback.message.answer(
-                text='Ссылка неправильная, отправьие корректную ссылку на видео в формате https://youtube.com/.. или https://youtu.be/..',
-                reply_markup=ReplyKeyboardRemove()
-            )
-    else:
-        is_short = video_info['is_short']
-        resolutions = video_info['uniq_v_resolutions'] if is_short else video_info['uniq_h_resolutions']
-        resolutions.sort()
-        resolutions = [resolution + 'p' for resolution in resolutions]
-        resolution_word = 'вертикальное' if is_short else 'горизонтальное'
+    is_short = video_info['is_short']
+    resolutions = video_info['uniq_v_resolutions'] if is_short else video_info['uniq_h_resolutions']
+    resolutions.sort()
+    resolutions = [resolution + 'p' for resolution in resolutions]
+    resolution_word = 'вертикальное' if is_short else 'горизонтальное'
 
-        message_text = f"""
-    {video_info['title']}
-    Длительность: {video_info['duration']}
-    Просмотры: {video_info['view_count']}
-    Лайки: {video_info['like_count']}
-    Дата загрузки: {video_info['upload_date']}
+    message_text = f"""
+{video_info['title']}
+Длительность: {video_info['duration']}
+Просмотры: {video_info['view_count']}
+Лайки: {video_info['like_count']}
+Дата загрузки: {video_info['upload_date']}
 
-    Для загрузки видео выберите {resolution_word} разрешение:
-    """
-        
-        await state.update_data(url=url)
-        await state.update_data(is_short=is_short)
-        
-        await callback.answer_photo(
-            photo=video_info['thumbnail'],
-            caption=message_text,
-            reply_markup=create_resolutions_keyboard(*resolutions)
-        )
-        await state.set_state(FSMVideo.download_video)
+Для загрузки видео выберите {resolution_word} разрешение:
+"""
+    
+    await state.update_data(url=url)
+    await state.update_data(is_short=is_short)
+    
+    await callback.answer_photo(
+        photo=video_info['thumbnail'],
+        caption=message_text,
+        reply_markup=create_resolutions_keyboard(*resolutions)
+    )
+    await state.set_state(FSMVideo.download_video)
 
 
 @router.callback_query(F.data, StateFilter(FSMVideo.download_video))

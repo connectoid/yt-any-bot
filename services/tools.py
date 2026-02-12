@@ -16,10 +16,6 @@ output_dir = 'downloads'
 tmp_dir = 'downloaded'
 
 
-def check_yt_url(url):
-    return not 'youtube' not in url and 'youtu.be' not in url
-
-
 def get_video_info(url):
     ydl_opts = {
         'quiet': True,
@@ -65,6 +61,7 @@ def get_video_info(url):
             'tags': info.get('tags'),
             'is_short': True if '/shorts/' in url else False
         }
+    
     return video_info
 
 

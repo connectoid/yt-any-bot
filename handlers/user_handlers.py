@@ -43,6 +43,7 @@ async def process_start_command(message: Message, bot: Bot):
 async def process_get_url_command(callback: CallbackQuery, state: FSMContext):
     print('URL recieved')
     url = callback.text
+    video_info = get_video_info(url)
     is_short = video_info['is_short']
     resolutions = video_info['uniq_v_resolutions'] if is_short else video_info['uniq_h_resolutions']
     resolutions.sort()

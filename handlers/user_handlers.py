@@ -17,7 +17,7 @@ from aiogram.types import ReplyKeyboardRemove
 from keyboards.main_menu import get_main_menu
 from keyboards.resolutions_kb import create_resolutions_keyboard
 from config_data.config import Config, load_config
-from services.tools import get_video_info, download_video, move_downloaded_file, check_yt_url
+from services.tools import get_video_info, download_video, move_downloaded_file
 
 router = Router()
 config: Config = load_config()

@@ -26,9 +26,8 @@ def get_video_info(url):
         'no_warnings': True,
     }
     with YoutubeDL(ydl_opts) as ydl:
-        try:
-            info = ydl.extract_info(url, download=False)
-        except Exception as e:
+        info = ydl.extract_info(url, download=False)
+        if not info:
             print(f'Ошибка получения информации о видео: {e}')
             return False
         formats = info.get('formats')

@@ -43,13 +43,15 @@ async def process_start_command(message: Message, bot: Bot):
 async def process_get_url_command(callback: CallbackQuery, state: FSMContext):
     print('URL recieved')
     url = callback.text
-    if not check_yt_url(url):
+    if check_yt_url(url):
+         print('Wrong url level 1')
          await callback.message.answer(
                 text='Ссылка неправильная, отправьие корректную ссылку на видео в формате https://youtube.com/.. или https://youtu.be/..',
                 reply_markup=ReplyKeyboardRemove()
             )
     video_info = get_video_info(url)
     if not video_info:
+         print('Wrong url level 2')
          await callback.message.answer(
                 text='Ссылка неправильная, отправьие корректную ссылку на видео в формате https://youtube.com/.. или https://youtu.be/..',
                 reply_markup=ReplyKeyboardRemove()

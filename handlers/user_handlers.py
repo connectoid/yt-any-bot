@@ -17,7 +17,7 @@ from aiogram.types import ReplyKeyboardRemove
 from keyboards.main_menu import get_main_menu
 from keyboards.resolutions_kb import create_resolutions_keyboard
 from config_data.config import Config, load_config
-from services.tools import get_video_info, download_video, move_downloaded_file
+from services.tools import get_video_info, download_video, move_downloaded_file, check_yt_url
 
 router = Router()
 config: Config = load_config()
@@ -34,49 +34,52 @@ async def content_type_example(msg: Message):
 
 @router.message(CommandStart())
 async def process_start_command(message: Message, bot: Bot):
-        await message.answer(
-        text='Hello message',
-        reply_markup=ReplyKeyboardRemove())
-
-
-@router.message(F.text(text='Button 1'))
-async def process_button_1_command(message: Message):
     await message.answer(
-         text='Button 1 pressed', 
-         reply_markup=ReplyKeyboardRemove()
-    )
+        text='Онтправьте ссылку на видео в формате https://youtube.com/.. или https://youtu.be/..',
+        reply_markup=ReplyKeyboardRemove())
 
 
 @router.message(F.text, StateFilter(default_state))
 async def process_get_url_command(callback: CallbackQuery, state: FSMContext):
     print('URL recieved')
     url = callback.text
+    if not check_yt_url(url):
+         await callback.message.answer(
+                text='Ссылка неправильная, отправьие корректную ссылку на видео в формате https://youtube.com/.. или https://youtu.be/..',
+                reply_markup=ReplyKeyboardRemove()
+            )
     video_info = get_video_info(url)
-    is_short = video_info['is_short']
-    resolutions = video_info['uniq_v_resolutions'] if is_short else video_info['uniq_h_resolutions']
-    resolutions.sort()
-    resolutions = [resolution + 'p' for resolution in resolutions]
-    resolution_word = 'вертикальное' if is_short else 'горизонтальное'
+    if not video_info:
+         await callback.message.answer(
+                text='Ссылка неправильная, отправьие корректную ссылку на видео в формате https://youtube.com/.. или https://youtu.be/..',
+                reply_markup=ReplyKeyboardRemove()
+            )
+    else:
+        is_short = video_info['is_short']
+        resolutions = video_info['uniq_v_resolutions'] if is_short else video_info['uniq_h_resolutions']
+        resolutions.sort()
+        resolutions = [resolution + 'p' for resolution in resolutions]
+        resolution_word = 'вертикальное' if is_short else 'горизонтальное'
 
-    message_text = f"""
-{video_info['title']}
-Длительность: {video_info['duration']}
-Просмотры: {video_info['view_count']}
-Лайки: {video_info['like_count']}
-Дата загрузки: {video_info['upload_date']}
+        message_text = f"""
+    {video_info['title']}
+    Длительность: {video_info['duration']}
+    Просмотры: {video_info['view_count']}
+    Лайки: {video_info['like_count']}
+    Дата загрузки: {video_info['upload_date']}
 
-Для загрузки видео выберите {resolution_word} разрешение:
-"""
-    
-    await state.update_data(url=url)
-    await state.update_data(is_short=is_short)
-    
-    await callback.answer_photo(
-         photo=video_info['thumbnail'],
-         caption=message_text,
-         reply_markup=create_resolutions_keyboard(*resolutions)
-    )
-    await state.set_state(FSMVideo.download_video)
+    Для загрузки видео выберите {resolution_word} разрешение:
+    """
+        
+        await state.update_data(url=url)
+        await state.update_data(is_short=is_short)
+        
+        await callback.answer_photo(
+            photo=video_info['thumbnail'],
+            caption=message_text,
+            reply_markup=create_resolutions_keyboard(*resolutions)
+        )
+        await state.set_state(FSMVideo.download_video)
 
 
 @router.callback_query(F.data, StateFilter(FSMVideo.download_video))

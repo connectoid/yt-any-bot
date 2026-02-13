@@ -12,18 +12,13 @@ from yt_dlp import YoutubeDL
 
 
 resolution_pattern = r'\b\d+x\d+\b'
-output_dir = 'downloads'
-tmp_dir = 'downloaded'
+downloads_dir = 'downloads'
+archive_dir = 'archive'
 
 
 def is_valid_youtube_url(url):
-    # Регулярное выражение для полной формы адреса
     full_pattern = r'^https?://(?:(?:www\.)?youtube\.com/(?:watch|embed)(?:\?(?!.*list=).*&)?v=([a-zA-Z0-9_-]{11}))'
-    
-    # Регулярное выражение для короткой формы адреса
     short_pattern = r'^https?://youtu\.be/([a-zA-Z0-9_-]{11})'
-    
-    # Регулярное выражение для YouTube Shorts
     shorts_pattern = r'^https?://(?:(?:www\.)?youtube\.com/shorts/([a-zA-Z0-9_-]{11}))'
     
     if re.match(full_pattern, url):
@@ -115,9 +110,9 @@ def format_selector(ctx, resolution=None, is_short=None):
 
 
 def download_video(url, resolution, is_short, id):
-    os.makedirs(output_dir, exist_ok=True)
+    os.makedirs(downloads_dir, exist_ok=True)
     format_selector_choosen = partial(format_selector, resolution=resolution, is_short=is_short)
-    output_file_path = os.path.join(output_dir, f'{id}_%(title)s_{resolution}.%(ext)s')
+    output_file_path = os.path.join(downloads_dir, f'{id}_%(title)s_{resolution}.%(ext)s')
     ydl_opts = {
         'outtmpl': output_file_path,
         'format': format_selector_choosen,
@@ -134,13 +129,24 @@ def download_video(url, resolution, is_short, id):
 def move_downloaded_file(file_name):
     # source_path = os.path.join(file_name)
     source_path = file_name
-    destination_dir = source_path.replace(output_dir, tmp_dir)
-    os.makedirs(destination_dir, exist_ok=True)
+    # destination_dir = os.path.dirname(source_path.replace(output_dir, tmp_dir))
+    os.makedirs(downloads_dir, exist_ok=True)
+    os.makedirs(archive_dir, exist_ok=True)
     
-    destination_path = os.path.join(destination_dir, file_name)
+    destination_path = file_name.replace(downloads_dir, archive_dir)
     
+
+    print(f'source path {source_path}')
+    print(f'destination_dir {downloads_dir}')
+    print(f'destination_path {destination_path}')
+
     try:
-        shutil.move(source_path, destination_path)
-        print(f'Файл {file_name} успешно перемещён.')
+        shutil.copy(source_path, destination_path)
+        if os.path.exists(source_path):
+            os.remove(source_path)
+        else:
+            print('Файл не существует')
+   
+        print(f'Файл {file_name} успешно перемещён из {source_path} в {destination_path}.')
     except Exception as e:
-        print(f'Ошибка в move downloaded при перемещении файла: {e}')
+        print(f'Ошибка в move downloaded при перемещении файла {file_name} из {source_path} в {destination_path}: {e}')

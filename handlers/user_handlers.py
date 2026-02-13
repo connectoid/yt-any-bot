@@ -54,12 +54,12 @@ async def process_get_url_command(callback: CallbackQuery, state: FSMContext):
 
             message_text = f"""
         {video_info['title']}
-        Длительность: {video_info['duration']}
-        Просмотры: {video_info['view_count']}
-        Лайки: {video_info['like_count']}
-        Дата загрузки: {video_info['upload_date']}
+Длительность: {video_info['duration']}
+Просмотры: {video_info['view_count']}
+Лайки: {video_info['like_count']}
+Дата загрузки: {video_info['upload_date']}
 
-        Для загрузки видео выберите {resolution_word} разрешение:
+Для загрузки видео выберите {resolution_word} разрешение:
         """
             
             await state.update_data(url=url)

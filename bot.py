@@ -3,6 +3,8 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.client.telegram import TelegramAPIServer
+from aiogram.client.session.aiohttp import AiohttpSession
 
 
 from config_data.config import Config, load_config
@@ -25,7 +27,8 @@ async def main():
     
     config: Config = load_config()
 
-    bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
+    session = AiohttpSession(api=TelegramAPIServer.from_base('http://localhost:8082'))
+    bot = Bot(token=config.tg_bot.token, session=session, parse_mode='HTML')
     dp = Dispatcher(storage=storage)
 
     print()

@@ -47,7 +47,7 @@ async def process_cancel_command(message: Message):
 
 @router.message(Command(commands='cancel'), StateFilter(FSMVideo.download_video))
 async def process_cancel_command_state(message: Message, state: FSMContext):
-    await message.answer(text='Вы вышли отменили загрузку видео\n\n',
+    await message.answer(text='Вы отменили загрузку видео\n\n',
                          reply_markup=ReplyKeyboardRemove())
     await state.clear()
 
@@ -86,7 +86,7 @@ async def process_get_url_command(callback: CallbackQuery, state: FSMContext):
             await state.set_state(FSMVideo.download_video)
         else:
             await callback.answer(
-                text='Неправильная ссылка, отправьте корректную ссылку на видео в формате https://youtube.com/.. или https://youtu.be/..',
+                text='Не удалось получить данные о видео или неправильная ссылка, отправьте корректную ссылку на видео в формате https://youtube.com/.. или https://youtu.be/..',
                 reply_markup=ReplyKeyboardRemove()
             )
     else:

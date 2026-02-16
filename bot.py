@@ -27,7 +27,7 @@ async def main():
     
     config: Config = load_config()
 
-    session = AiohttpSession(api=TelegramAPIServer.from_base('http://localhost:8082'))
+    session = AiohttpSession(api=TelegramAPIServer.from_base('http://localhost:8081'))
     bot = Bot(token=config.tg_bot.token, session=session, parse_mode='HTML')
     dp = Dispatcher(storage=storage)
 

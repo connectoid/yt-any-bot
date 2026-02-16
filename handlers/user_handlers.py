@@ -27,7 +27,7 @@ storage = MemoryStorage()
 class FSMVideo(StatesGroup):
     download_video = State()
 
-@router.message(~F.text, StateFilter(FSMVideo.download_video))
+@router.message(F.text, StateFilter(FSMVideo.download_video))
 async def content_type_example(msg: Message):
     await msg.answer('Для загрузки видео выберите разрешение (или выполните команду /cancel для отмены загрузки видео):')
 

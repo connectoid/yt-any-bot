@@ -27,10 +27,6 @@ storage = MemoryStorage()
 class FSMVideo(StatesGroup):
     download_video = State()
 
-@router.message(F.text, StateFilter(FSMVideo.download_video))
-async def content_type_example(msg: Message):
-    await msg.answer('Для загрузки видео выберите разрешение (или выполните команду /cancel для отмены загрузки видео):')
-
 
 @router.message(CommandStart())
 async def process_start_command(message: Message, bot: Bot):
@@ -124,3 +120,9 @@ async def process_download_video(callback: CallbackQuery, state: FSMContext):
                     reply_markup=ReplyKeyboardRemove()
                 )
                 await state.clear()
+
+
+@router.message(F.text, StateFilter(FSMVideo.download_video))
+async def content_type_example(msg: Message):
+    await msg.answer('Для загрузки видео выберите разрешение (или выполните команду /cancel для отмены загрузки видео):')
+

@@ -6,7 +6,7 @@ from aiogram.types import BotCommand
 
 commands = {
       '/start': 'Запустить/перезапустить бота',
-      # '/second_command': 'Second Command',
+      '/cancel': 'Отменить загрузку/Перезапустить диалог загрузки видео',
       # '/third_command': 'Third Command',
 }
 

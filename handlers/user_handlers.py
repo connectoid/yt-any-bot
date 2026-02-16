@@ -27,9 +27,9 @@ storage = MemoryStorage()
 class FSMVideo(StatesGroup):
     download_video = State()
 
-@router.message(~F.text)
+@router.message(~F.text, StateFilter(FSMVideo.download_video))
 async def content_type_example(msg: Message):
-    await msg.answer('👍')
+    await msg.answer('Для загрузки видео выберите разрешение (или выполните команду /cancel для отмены загрузки видео):')
 
 
 @router.message(CommandStart())
@@ -37,6 +37,19 @@ async def process_start_command(message: Message, bot: Bot):
     await message.answer(
         text='Онтправьте ссылку на видео в формате https://youtube.com/.. или https://youtu.be/..',
         reply_markup=ReplyKeyboardRemove())
+
+
+@router.message(Command(commands='cancel'), StateFilter(default_state))
+async def process_cancel_command(message: Message):
+    await message.answer(text='ℹ️ Отменять нечего.\n',
+                         reply_markup=ReplyKeyboardRemove())
+    
+
+@router.message(Command(commands='cancel'), StateFilter(FSMVideo.download_video))
+async def process_cancel_command_state(message: Message, state: FSMContext):
+    await message.answer(text='Вы вышли отменили загрузку видео\n\n',
+                         reply_markup=ReplyKeyboardRemove())
+    await state.clear()
 
 
 @router.message(F.text, StateFilter(default_state))
@@ -59,7 +72,7 @@ async def process_get_url_command(callback: CallbackQuery, state: FSMContext):
 Лайки: {video_info['like_count']}
 Дата загрузки: {video_info['upload_date']}
 
-Для загрузки видео выберите {resolution_word} разрешение:
+Для загрузки видео выберите {resolution_word} разрешение (или выполните команду /cancel для отмены загрузки видео):
         """
             
             await state.update_data(url=url)

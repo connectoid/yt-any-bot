@@ -14,6 +14,7 @@ from yt_dlp import YoutubeDL
 resolution_pattern = r'\b\d+x\d+\b'
 downloads_dir = 'downloads'
 archive_dir = 'archive'
+VIDEO_EXT = 'mp4'
 
 
 def is_valid_youtube_url(url):
@@ -67,6 +68,7 @@ def get_video_info(url):
             'uniq_v_resolutions' : uniq_v_resolutions,
             'title': info.get('title'),
             'resolution': info.get('resolution'),
+            'video_ext': info.get('video_ext'),
             'duration': f'{info.get("duration", 0) // 60}:{info.get("duration", 0) % 60:02d}',
             'upload_date': datetime.strptime(info.get('upload_date'), '%Y%m%d').strftime('%d.%m.%Y'),
             'uploader': info.get('uploader'),
@@ -89,13 +91,15 @@ def format_selector(ctx, resolution=None, is_short=None):
     best_videos = []
     for format in formats:
         res = format['resolution']
+        video_ext = format['video_ext']
         if is_short:
-            if res.split('x')[-1] == str(resolution):
+            if res.split('x')[-1] == str(resolution) and video_ext == VIDEO_EXT:
                 best_videos.append(format)
         else:
             if res.split('x')[0] == str(resolution):
                 best_videos.append(format)
     best_video = best_videos[-1]
+    pprint(best_video)
     audio_ext = {'mp4': 'm4a', 'webm': 'webm'}[best_video['ext']]
     best_audio = next(f for f in formats if (
         f['acodec'] != 'none' and f['vcodec'] == 'none' and f['ext'] == audio_ext))

@@ -36,6 +36,7 @@ def get_video_info(url):
     ydl_opts = {
         'quiet': True,
         'no_warnings': True,
+        # 'cookiefile': 'cookies.txt'
     }
     with YoutubeDL(ydl_opts) as ydl:
         try:
@@ -83,7 +84,7 @@ def get_video_info(url):
             'is_short': True if '/shorts/' in url else False
         }
     
-    return video_info
+    return video_info 
 
 
 def format_selector(ctx, resolution=None, is_short=None):
@@ -122,6 +123,7 @@ def download_video(url, resolution, is_short, id):
         'format': format_selector_choosen,
         'quiet': True,
         'no_warnings': True,
+        # 'cookiefile': 'cookies.txt'
     }
 
     ydl = YoutubeDL(ydl_opts)

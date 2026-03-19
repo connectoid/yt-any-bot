@@ -36,6 +36,7 @@ def get_video_info(url):
     ydl_opts = {
         'quiet': True,
         'no_warnings': True,
+        'cookiefile': 'cookies.txt'
     }
     with YoutubeDL(ydl_opts) as ydl:
         try:
@@ -83,7 +84,7 @@ def get_video_info(url):
             'is_short': True if '/shorts/' in url else False
         }
     
-    return video_info
+    return video_info 
 
 
 def format_selector(ctx, resolution=None, is_short=None):
@@ -99,6 +100,7 @@ def format_selector(ctx, resolution=None, is_short=None):
             if res.split('x')[0] == str(resolution):
                 best_videos.append(format)
     best_video = best_videos[-1]
+    pprint(best_video)
     audio_ext = {'mp4': 'm4a', 'webm': 'webm'}[best_video['ext']]
     best_audio = next(f for f in formats if (
         f['acodec'] != 'none' and f['vcodec'] == 'none' and f['ext'] == audio_ext))
@@ -121,6 +123,7 @@ def download_video(url, resolution, is_short, id):
         'format': format_selector_choosen,
         'quiet': True,
         'no_warnings': True,
+        'cookiefile': 'cookies.txt'
     }
 
     ydl = YoutubeDL(ydl_opts)

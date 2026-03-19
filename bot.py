@@ -3,8 +3,6 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.client.telegram import TelegramAPIServer
-from aiogram.client.session.aiohttp import AiohttpSession
 
 
 from config_data.config import Config, load_config
@@ -27,8 +25,7 @@ async def main():
     
     config: Config = load_config()
 
-    session = AiohttpSession(api=TelegramAPIServer.from_base('http://localhost:8081'))
-    bot = Bot(token=config.tg_bot.token, session=session, parse_mode='HTML')
+    bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
     dp = Dispatcher(storage=storage)
 
     print()
@@ -40,6 +37,7 @@ async def main():
     await set_commands_menu(bot)
     await dp.start_polling(bot)
     print('Bot started')
+    
 
 
 if __name__ == '__main__':

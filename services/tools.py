@@ -36,7 +36,7 @@ def get_video_info(url):
     ydl_opts = {
         'quiet': True,
         'no_warnings': True,
-        'proxy': '213.139.221.151:9994:WagubQ:HjuXEb'
+        # 'proxy': '213.139.221.151:9994:WagubQ:HjuXEb'
         # 'cookiefile': 'cookies_a.txt',
         # 'cookies-from-browser': True
     }
@@ -126,7 +126,7 @@ def download_video(url, resolution, is_short, id):
         'format': format_selector_choosen,
         'quiet': True,
         'no_warnings': True,
-        'proxy': '213.139.221.151:9994:WagubQ:HjuXEb'
+        # 'proxy': '213.139.221.151:9994:WagubQ:HjuXEb'
         # 'cookiefile': 'cookies_a.txt',
         # 'cookies-from-browser': True
     }

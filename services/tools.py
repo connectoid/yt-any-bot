@@ -6,7 +6,6 @@ from pprint import pprint
 from datetime import datetime
 
 from yt_dlp import YoutubeDL
-from youtube_urls_validator import validate_url
 
 # To update yt_dlp execute pip install -U yt-dlp
 # If 404 error

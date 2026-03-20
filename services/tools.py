@@ -36,14 +36,16 @@ def get_video_info(url):
     ydl_opts = {
         'quiet': True,
         'no_warnings': True,
-        'cookies': 'cookies_a.txt',
+        'proxy': '213.139.221.151:9994:WagubQ:HjuXEb'
+        # 'cookiefile': 'cookies_a.txt',
         # 'cookies-from-browser': True
     }
     with YoutubeDL(ydl_opts) as ydl:
+        info = ydl.extract_info(url, download=False)
         try:
             info = ydl.extract_info(url, download=False)
         except Exception as e:
-            print(f'Ошибка при получении информации о видео: {e}')
+            print(f'Ошибка при получении информации о видео [get_video_info]: {e}')
             return False
         formats = info.get('formats')
         resolutions = [format['resolution'] for format in formats]
@@ -124,7 +126,8 @@ def download_video(url, resolution, is_short, id):
         'format': format_selector_choosen,
         'quiet': True,
         'no_warnings': True,
-        'cookies': 'cookies_a.txt',
+        'proxy': '213.139.221.151:9994:WagubQ:HjuXEb'
+        # 'cookiefile': 'cookies_a.txt',
         # 'cookies-from-browser': True
     }
 

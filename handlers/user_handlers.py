@@ -52,8 +52,6 @@ async def process_cancel_command_state(message: Message, state: FSMContext):
 async def process_get_url_command(callback: CallbackQuery, state: FSMContext):
     print('URL recieved')
     url = callback.text
-    url = url.split('?')[0]
-    print(url)
     if is_valid_youtube_url(url):
         video_info = get_video_info(url)
         if video_info:
